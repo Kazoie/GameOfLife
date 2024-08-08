@@ -12,7 +12,7 @@ public class GameOfLife extends JPanel {
     private int cellSize = 4; // Taille de chaque cellule
     private Timer timer;
 
-    public GameOfLife(int maxGeneration, int patternNumber) {
+    public GameOfLife(int patternNumber) {
         initialize(); // Initialise le taurus (grille)
         randomCells(taurus, patternNumber); // Génère 5 motifs aléatoires sur la grille
 
@@ -53,7 +53,7 @@ public class GameOfLife extends JPanel {
 
 
     public void randomCells(boolean[][] taurus, int numberOfPatterns) {
-        String[] patterns = {"Blinker", "Glider", "Block", "Beehive", "Toad", "Loaf", "Boat", "LWSS", "Pulsar", "Pentadecathlon", "Glider Gun"};
+        String[] patterns = {"Blinker", "Glider", "Block", "Beehive", "Toad", "Loaf", "Boat", "LWSS", "Pulsar", "Pentadecathlon", "Glider Gun", "Puffer"};
         Random r = new Random();
 
         for (int i = 0; i < numberOfPatterns; i++) {
@@ -117,6 +117,39 @@ public class GameOfLife extends JPanel {
                     y = r.nextInt(taurus[0].length - 36);
                     placeGliderGun(taurus, x, y);
                     break;
+                case "Puffer":  // Ajout du case pour le Puffer
+                    x = r.nextInt(taurus.length - 14);
+                    y = r.nextInt(taurus[0].length - 17);
+                    placeSpacefillerPuffer(taurus, x, y);
+                    break;
+            }
+        }
+    }
+
+
+    public void placeSpacefillerPuffer(boolean[][] taurus, int x, int y) {
+        int[][] spacefillerPufferPattern = {
+                {1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1},
+                {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1},
+                {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1},
+                {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1},
+                {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1},
+                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1},
+                {1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,0,1},
+                {1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,0,1},
+                {1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,0,1},
+                {1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,0,1},
+                {1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,0,1},
+                {1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1}
+        };
+
+        for (int i = 0; i < spacefillerPufferPattern.length; i++) {
+            for (int j = 0; j < spacefillerPufferPattern[i].length; j++) {
+                if ((x + i < taurusSize) && (y + j < taurusSize)) {
+                    taurus[x + i][y + j] = spacefillerPufferPattern[i][j] == 1;
+                }
             }
         }
     }
@@ -292,6 +325,6 @@ public class GameOfLife extends JPanel {
     }
 
     public static void main(String[] args) {
-        new GameOfLife(1000, 1000);
+        new GameOfLife(500);
     }
 }
