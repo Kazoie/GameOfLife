@@ -9,12 +9,14 @@ import javax.swing.Timer;
 public class GameOfLife extends JPanel {
     private int taurusSize = 300;
     private boolean[][] taurus = new boolean[taurusSize][taurusSize];
-    private int cellSize = 4; // Taille de chaque cellule
+    private int cellSize = 3; // Taille de chaque cellule
     private Timer timer;
 
-    public GameOfLife(int patternNumber) {
+    public GameOfLife(int patternNumber,String patternName) {
         initialize(); // Initialise le taurus (grille)
+
         randomCells(taurus, patternNumber); // Génère 5 motifs aléatoires sur la grille
+        choosenCell(patternName);
 
         timer = new Timer(30, e -> {
             step();
@@ -51,9 +53,50 @@ public class GameOfLife extends JPanel {
         }
     }
 
+    public void choosenCell(String patternName) {
+        switch(patternName) {
+            case "Pulsar":
+                placePulsar(taurus, taurusSize/2, taurusSize/2);
+                break;
+            case "Blinker":
+                placeBlinker(taurus, taurusSize/2, taurusSize/2);
+                break;
+            case "Glider":
+                placeGlider(taurus,taurusSize/2, taurusSize/2);
+                break;
+            case "Block":
+                placeBlock(taurus,taurusSize/2, taurusSize/2);
+                break;
+            case "Beehive":
+                placeBeehive(taurus,taurusSize/2, taurusSize/2);
+                break;
+            case "Toad":
+                placeToad(taurus,taurusSize/2, taurusSize/2);
+                break;
+            case "Loaf":
+                placeLoaf(taurus,taurusSize/2, taurusSize/2);
+                break;
+            case "Boat":
+                placeBoat(taurus,taurusSize/2, taurusSize/2);
+                break;
+            case "LWSS":
+                placeLWSS(taurus,taurusSize/2, taurusSize/2);
+                break;
+            case "Pentadecathlon":
+                placePentadecathlon(taurus,taurusSize/2, taurusSize/2);
+                break;
+            case "Glider Gun":
+                placeGliderGun(taurus,taurusSize/2, taurusSize/2);
+                break;
+            case "Mathusalem":
+                placeMathusalem(taurus,taurusSize/2, taurusSize/2);
+                break;
+        }
+    }
+
 
     public void randomCells(boolean[][] taurus, int numberOfPatterns) {
-        String[] patterns = {"Blinker", "Glider", "Block", "Beehive", "Toad", "Loaf", "Boat", "LWSS", "Pulsar", "Pentadecathlon", "Glider Gun"};
+        String[] patterns = {"Blinker", "Glider", "Block", "Beehive", "Toad", "Loaf", "Boat", "LWSS", "Pulsar", "Pentadecathlon", "Glider Gun","Mathusalem"};
         Random r = new Random();
 
         for (int i = 0; i < numberOfPatterns; i++) {
@@ -117,10 +160,23 @@ public class GameOfLife extends JPanel {
                     y = r.nextInt(taurus[0].length - 36);
                     placeGliderGun(taurus, x, y);
                     break;
+                case "Mathusalem":
+                    x = r.nextInt(taurus.length - 4);
+                    y = r.nextInt(taurus.length -4);
+                    placeMathusalem(taurus,x,y);
+                    break;
             }
         }
     }
 
+
+    public void placeMathusalem(boolean[][] taurus,int x, int y){
+        taurus[x][y] = true;
+        taurus[x-1][y] = true;
+        taurus[x][y+1] = true;
+        taurus[x+1][y] = true;
+        taurus[x-1][y-1] = true;
+    }
 
     public void placeGliderGun(boolean[][] taurus, int x, int y) {
         //9*36 needed
@@ -163,17 +219,19 @@ public class GameOfLife extends JPanel {
     }
 
     public void placeLWSS(boolean[][] taurus, int x, int y) {
-        taurus[x][y + 1] = true;
-        taurus[x][y + 4] = true;
-        taurus[x + 1][y] = true;
-        taurus[x + 1][y + 4] = true;
-        taurus[x + 2][y + 4] = true;
-        taurus[x + 3][y] = true;
-        taurus[x + 3][y + 3] = true;
-        taurus[x + 3][y + 4] = true;
-        taurus[x + 4][y + 1] = true;
-        taurus[x + 4][y + 2] = true;
-        taurus[x + 4][y + 3] = true;
+        int[][]LWSSPattern = {
+                {0,0,0,0,0,0,0},
+                {0,0,1,0,0,1,0},
+                {0,1,0,0,0,0,0},
+                {0,1,0,0,0,1,0},
+                {0,1,1,1,1,0,0},
+                {0,0,0,0,0,0,0},
+        };
+        for (int i = 0; i < LWSSPattern.length; i++) {
+            for (int j = 0; j < LWSSPattern[0].length; j++) {
+                taurus[x + i][y + j] = LWSSPattern[i][j] == 1;
+            }
+        }
     }
 
     public void placePulsar(boolean[][] taurus, int x, int y) {
@@ -295,6 +353,6 @@ public class GameOfLife extends JPanel {
     }
 
     public static void main(String[] args) {
-        new GameOfLife(15 );
+        new GameOfLife(0,"LWSS");
     }
 }
